@@ -1,0 +1,116 @@
+_G.Main = {}
+
+function _G.Main:New(Title)
+	
+	local ScreenGui = Instance.new("ScreenGui")
+	local UI = Instance.new("Frame")
+	local title = Instance.new("TextLabel")
+	local Holder = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+
+
+	ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+	UI.Name = "UI"
+	UI.Parent = ScreenGui
+	UI.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+	UI.BorderSizePixel = 0
+	UI.Position = UDim2.new(0.242540166, 0, 0.18895705, 0)
+	UI.Size = UDim2.new(0, 376, 0, 345)
+
+	title.Name = "title"
+	title.Parent = UI
+	title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	title.BackgroundTransparency = 1.000
+	title.Position = UDim2.new(0.234042555, 0, 0, 0)
+	title.Size = UDim2.new(0, 200, 0, 50)
+	title.Font = Enum.Font.SourceSansBold
+	title.Text = Title
+	title.TextColor3 = Color3.fromRGB(255, 255, 255)
+	title.TextScaled = true
+	title.TextSize = 14.000
+	title.TextWrapped = true
+
+	Holder.Name = "Holder"
+	Holder.Parent = UI
+	Holder.BackgroundColor3 = Color3.fromRGB(121, 121, 121)
+	Holder.BorderSizePixel = 0
+	Holder.Position = UDim2.new(0.0531914905, 0, 0.144927531, 0)
+	Holder.Size = UDim2.new(0, 335, 0, 260)
+
+
+	local function IWEXRRJ_fake_script() -- UI.LocalScript 
+		local script = Instance.new('LocalScript', UI)
+
+		local UserInputService = game:GetService("UserInputService")
+
+		local gui = script.Parent
+
+		local dragging
+		local dragInput
+		local dragStart
+		local startPos
+
+		local function update(input)
+			local delta = input.Position - dragStart
+			gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+
+		gui.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				dragging = true
+				dragStart = input.Position
+				startPos = gui.Position
+
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragging = false
+					end
+				end)
+			end
+		end)
+
+		gui.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
+			end
+		end)
+
+		UserInputService.InputChanged:Connect(function(input)
+			if input == dragInput and dragging then
+				update(input)
+			end
+		end)
+	end
+	coroutine.wrap(IWEXRRJ_fake_script)()
+	
+	_G.Frame = {}
+	function _G.Frame:Button(Name,Call)
+		local TextButton = Instance.new("TextButton")
+		
+		TextButton.Parent = Holder
+		TextButton.Text = Name
+		TextButton.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+		TextButton.BorderSizePixel = 0
+		TextButton.Position = UDim2.new(0.0597014911, 0, 0.0307692308, 0)
+		TextButton.Size = UDim2.new(0, 293, 0, 50)
+		TextButton.Font = Enum.Font.SourceSansBold
+		TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		TextButton.TextScaled = true
+		TextButton.TextSize = 14.000
+		TextButton.TextWrapped = true
+		
+		TextButton.MouseButton1Click:Connect(function()
+			
+			pcall(Call)
+			
+		end)
+
+		UICorner.Parent = TextButton
+	end
+	
+	return _G.Frame
+	
+end
+
+return _G.Main
